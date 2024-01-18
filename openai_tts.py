@@ -13,12 +13,16 @@ client = OpenAI(
 file_path = 'temp/test.md'
 
 with open(file_path, 'r') as file:
-    content = file.read()
+    rows = file.readlines()
 
-response = client.audio.speech.create(
-    model="tts-1",
-    voice="nova",
-    input=content,
-)
+for idx, row in enumerate(rows):
+    print(f'{idx + 1}/{len(rows)} - {(idx + 1)/len(rows) * 100:.2f}%')
 
-response.stream_to_file('temp/test.mp3')
+    if len(row) > 1:
+        response = client.audio.speech.create(
+            model="tts-1-hd",
+            voice="nova",
+            input=row,
+        )
+
+        response.stream_to_file(f'temp/test-{str(idx).zfill(6)}.mp3')

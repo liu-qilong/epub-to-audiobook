@@ -3,7 +3,6 @@ import sys
 
 # get the file path from command line arguments
 file_path = sys.argv[1]
-is_clean = (sys.argv[2] == 'true')
 
 with open(file_path, 'r') as file:
     content = file.read()
@@ -31,13 +30,6 @@ modified_content = re.sub(r'{[^}]*}', '', modified_content, flags=re.DOTALL)
 
 # remove pattern [^\[text\]^]
 modified_content = re.sub(r'\[\^\\\[[^\]]+\]\^\]', '', modified_content, flags=re.DOTALL)
-
-if is_clean:
-    # remove special characters
-    modified_content = re.sub(r'"|“|”|《|》|<|>|！|!', '', modified_content, flags=re.DOTALL)
-
-    # replace special characters
-    modified_content = re.sub(r';|；|：', ',', modified_content, flags=re.DOTALL)
 
 # output
 with open(file_path, 'w') as file:
